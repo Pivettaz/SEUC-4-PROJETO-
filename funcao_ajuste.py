@@ -36,5 +36,5 @@ def ajuste_pressao():
     media = soma / leituras_realizadas
     porcentagem_verde = zona_verde * 100 / leituras_realizadas
     percentual_leituras = (leituras_realizadas / quantidade) * 100
-    return menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento
+    return menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade
 

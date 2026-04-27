@@ -1,11 +1,9 @@
 from funcao_ajuste import ajuste_pressao
-from menu import menu
 
-def metricas():
-    menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento = ajuste_pressao()
-
+def exibir_metricas(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade):
     print("")
-    print("\n=== METRICAS FINAIS ===")
+    print("\n=== MÉTRICAS DO TURNO ===")
+    print("Quantidade de pressões lidas: {}".format(quantidade))
     print("Média das pressões ajustadas: {:.2f}".format(media))
     print("Menor pressão ajustada: {:.2f}". format(menor_pressao))
     print("Porcentagem de leituras que ficaram na zona verde: {:.2f}%".format(porcentagem_verde))
@@ -13,4 +11,3 @@ def metricas():
         print("Percentual de leituras realizadas: {:.2f}%".format(percentual_leituras))
     else:
         print("Sistema encerrado sem travamento")
-
