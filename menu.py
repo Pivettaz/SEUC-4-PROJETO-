@@ -49,8 +49,6 @@ def menu():
                     exibir_metricas(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade)
                 else:
                     print("\nPor favor, insira as pressões primeiro (Opção 1) para ver as métricas.")
-            case 3:
-
             case 4:
                 executando_menu_um = 0
                 print("\nFinalizando o programa...")
