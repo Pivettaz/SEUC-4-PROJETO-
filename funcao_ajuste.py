@@ -34,7 +34,9 @@ def ajuste_pressao():
             print("Protocolo de Travamento: duas leituras seguidas de pressões na zona vermelha")
             break
         zona_anterior = zona
-    return quantidade, soma, menor_pressao, zona_verde, leituras_realizadas, houve_travamento
+    media = soma/leituras_realizadas
+    porcentagem_verde = zona_verde*100 / leituras_realizadas
+    return quantidade, soma, menor_pressao, zona_verde, leituras_realizadas, houve_travamento, media, porcentagem_verde
 
 # NEXT EXTRA: maior pressão ajustada, acho um extra legal para colocar
 
