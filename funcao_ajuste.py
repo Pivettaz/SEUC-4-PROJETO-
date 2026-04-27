@@ -56,7 +56,7 @@ def ajuste_pressao():
             maior_pressao = pressao_ajustada
 
         zona = classificacao_estabilidade(pressao_ajustada)
-        print(f"Pressão ajustada: {pressao_ajustada:.2f} UCPs | Zona: {zona}")
+        print(f"Pressão ajustada: {pressao_ajustada:.2f} UPCs | Zona: {zona}")
 
         if zona == "Verde":
             zona_verde += 1
