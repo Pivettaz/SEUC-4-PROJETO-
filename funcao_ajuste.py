@@ -36,17 +36,22 @@ def ajuste_pressao():
     for i in range(quantidade):
         leituras_realizadas += 1
         pressao = ler_pressao()
+        
         if pressao > 150:
             pressao_ajustada = pressao * 1.08
         else:
             pressao_ajustada = pressao * 0.96
         soma += pressao_ajustada
+
         if pressao_ajustada < menor_pressao:
             menor_pressao = pressao_ajustada
+        
         zona = classificacao_estabilidade(pressao_ajustada)
         print(f"Pressão ajustada: {pressao_ajustada:.2f} UCPs | Zona: {zona}")
+        
         if zona == "Verde":
             zona_verde += 1
+
         if zona == "Vermelha" and zona_anterior == "Vermelha":
             houve_travamento = 1
             print("Protocolo de Travamento: duas leituras seguidas de pressões na zona vermelha")
