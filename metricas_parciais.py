@@ -1,5 +1,3 @@
-from funcao_ajuste import ajuste_pressao
-
 def exibir_metricas(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade):
     print("")
     print("\n=== MÉTRICAS DO TURNO ===")

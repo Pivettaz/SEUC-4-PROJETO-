@@ -1,41 +1,47 @@
 from funcao_ajuste import ajuste_pressao
 from metricas_parciais import exibir_metricas
+from validacoes import validacao_opcao
 
-def menu_um():
-    print("\n1 - Inserir Pressões")
-    print("2 - Mostrar Métricas do Turno")
-    print("3 - Mostrar Métrica Total")
+def menu_inicial():
+    print("\n1 - Começar Turno")
+    print("2 - Sair")
+
+def menu_secundario():
+    print("\n1 - Começar Novo Turno")
+    print("2 - Mostrar Métricas do Turno Atual")
+    print("3 - Mostrar Métricas Totais")
     print("4 - Sair")
-
-def validacao_opcao():
-    executando_entrada = 1
-    while (executando_entrada == 1):
-        try:
-            escolha = int(input("Digite sua escolha: "))
-            if 1 <= escolha <= 4:
-                executando_entrada = 1
-                return escolha
-            else:
-                print(f"Opção inválida. Por favor, escolha uma opção entre 1 e 3.")
-                menu_um()
-        except ValueError:
-            print("Entrada inválida. Por favor, digite um número inteiro.")
-            menu_um()
 
 def menu():
     executando_menu_um = 1
+    executando_menu_incial = 1
     menor_pressao = None
     media = None
     porcentagem_verde = None
     percentual_leituras = None
     houve_travamento = None
+    quantidade = None
 
     while(executando_menu_um == 1):
-        menu_um()
+        if(executando_menu_incial == 1):
 
-        escolha = validacao_opcao()
+            menu_inicial()
 
-        match escolha:
+            escolha = validacao_opcao(1, 2)
+
+            match escolha:
+                case 1:
+                    menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade = ajuste_pressao()
+                    executando_menu_incial = 0
+                case 2:
+                    executando_menu_um = 0
+                    print("\nFinalizando o programa...")
+
+        menu_secundario()
+
+        escolha_dois = validacao_opcao(1, 4)
+
+        match escolha_dois:
             case 1:
                 menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade = ajuste_pressao()
             case 2:
@@ -43,6 +49,8 @@ def menu():
                     exibir_metricas(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade)
                 else:
                     print("\nPor favor, insira as pressões primeiro (Opção 1) para ver as métricas.")
+            case 3:
+
             case 4:
                 executando_menu_um = 0
                 print("\nFinalizando o programa...")
