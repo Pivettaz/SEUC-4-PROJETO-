@@ -17,3 +17,16 @@ def exibir_metricas_turno(menor_pressao, media, porcentagem_verde, percentual_le
         print("Percentual de leituras realizadas: {:.2f}%".format(percentual_leituras))
     else:
         print("Sistema encerrado sem travamento")
+
+def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, soma_medias, soma_verde, total_travamentos):
+    media_geral = soma_medias / total_turnos
+    porcentagem_verde_geral = soma_verde / total_turnos
+
+    print("")
+    print("\n=== MÉTRICAS TOTAIS ===")
+    print("Total de turnos realizados: {}".format(total_turnos))
+    print("Total de leituras realizadas: {}".format(total_leituras))
+    print("Menor pressão global: {:.2f}".format(menor_pressao_global))
+    print("Média geral das pressões ajustadas: {:.2f}".format(media_geral))
+    print("Porcentagem geral de leituras na zona verde: {:.2f}%".format(porcentagem_verde_geral))
+    print("Turnos com travamento: {}".format(total_travamentos))
