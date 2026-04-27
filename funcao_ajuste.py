@@ -2,10 +2,24 @@ from funcao_estabilidade import classificacao_estabilidade
 from validacoes import validacao_opcao
 
 def ler_quantidade():
-    return int(input("\nQuantidade de pressões: "))
+    executando_leitura = 1
+    while executando_leitura == 1:
+        try:
+            opcao = int(input("Digite quantas leituras serão realizadas neste turno: "))
+            executando_leitura = 0
+        except ValueError:
+            print("\nEntrada inválida. Por favor, digite um número inteiro")
+    return opcao
 
 def ler_pressao():
-    return float(input("\nDigite a pressão em UCPs: "))
+    executando_leitura = 1
+    while executando_leitura == 1:
+        try:
+            opcao = int(input("Digite a pressão em UPCs: "))
+            executando_leitura = 0
+        except ValueError:
+            print("\nEntrada inválida. Por favor, digite um número real ou inteiro")
+    return opcao
 
 def ajuste_pressao():
     quantidade = ler_quantidade()
