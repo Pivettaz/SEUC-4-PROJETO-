@@ -1,5 +1,7 @@
 from funcao_estabilidade import classificacao_estabilidade
 from validacoes import validacao_opcao
+from sub_menus import menu_pressoes
+from metricas import exibir_metricas_parciais
 
 def ler_quantidade():
     return int(input("\nQuantidade de pressões: "))
@@ -45,8 +47,7 @@ def ajuste_pressao():
             print("\nLeituras do turno realizadas com sucesso!")
             break
 
-        print("\n1 - Inserir pressão")
-        print("2 - Métricas Parciais do Turno")
+        menu_pressoes()
 
         opcao = validacao_opcao(1, 2)
 
@@ -55,12 +56,7 @@ def ajuste_pressao():
             continue
         else:
             cont += 1
-            print("")
-            print("\n=== MÉTRICAS PARCIAIS ===")
-            print("Quantidade de pressões lidas: {}".format(cont))
-            print("Média das pressões ajustadas: {:.2f}".format(media))
-            print("Menor pressão ajustada: {:.2f}".format(menor_pressao))
-            print("Porcentagem de leituras que ficaram na zona verde: {:.2f}%".format(porcentagem_verde))
+            exibir_metricas_parciais(cont, media, menor_pressao, porcentagem_verde)
 
 
     media = soma / leituras_realizadas
