@@ -1,32 +1,88 @@
-def exibir_metricas_parciais(cont, media, menor_pressao, porcentagem_verde):
-    print("")
-    print("\n=== MÉTRICAS PARCIAIS ===")
-    print(f"Quantidade de pressões lidas: {cont}")
-    print(f"Média das pressões ajustadas: {media:.2f}")
-    print(f"Menor pressão ajustada: {menor_pressao:.2f}")
-    print(f"Porcentagem de leituras que ficaram na zona verde: {porcentagem_verde:.2f}%")
-
-def exibir_metricas_turno(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade):
-    print("")
-    print("\n=== MÉTRICAS DO TURNO ===")
-    print("Quantidade de pressões lidas: {}".format(quantidade))
-    print("Média das pressões ajustadas: {:.2f}".format(media))
-    print("Menor pressão ajustada: {:.2f}". format(menor_pressao))
-    print("Porcentagem de leituras que ficaram na zona verde: {:.2f}%".format(porcentagem_verde))
+def diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona):
     if houve_travamento == 1:
-        print("Percentual de leituras realizadas: {:.2f}%".format(percentual_leituras))
+        return "TURNO INTERROMPIDO POR SEGURANÇA"
+    elif zona_vermelha > 0:
+        return "TURNO INSTÁVEL"
+    elif mudancas_zona > 0:
+        return "TURNO EM OBSERVAÇÃO"
     else:
-        print("Sistema encerrado sem travamento")
+        return "TURNO ESTÁVEL"
 
-def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, soma_medias, soma_verde, total_travamentos):
+def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+    porcentagem_verde = zona_verde * 100 / cont
+    porcentagem_amarela = zona_amarela * 100 / cont
+    porcentagem_vermelha = zona_vermelha * 100 / cont
+    diagnostico = diagnostico_turno(0, zona_vermelha, mudancas_zona)
+
+    print("\n=======================================================")
+    print("               MÉTRICAS PARCIAIS DO TURNO")
+    print("=======================================================")
+    print(f"  Quantidade de pressões lidas : {cont}")
+    print(f"  Média das pressões ajustadas : {media:.2f} UCPs")
+    print(f"  Menor pressão ajustada       : {menor_pressao:.2f} UCPs")
+    print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UCPs")
+    print("-------------------------------------------------------")
+    print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
+    print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
+    print(f"  Zona Vermelha : {zona_vermelha} leituras ({porcentagem_vermelha:.2f}%)")
+    print("-------------------------------------------------------")
+    print(f"  Diagnóstico   : {diagnostico}")
+    print("=======================================================")
+
+def exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+    total_leituras_turno = zona_verde + zona_amarela + zona_vermelha
+    porcentagem_verde = zona_verde * 100 / total_leituras_turno
+    porcentagem_amarela = zona_amarela * 100 / total_leituras_turno
+    porcentagem_vermelha = zona_vermelha * 100 / total_leituras_turno
+    diagnostico = diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona)
+
+    print("\n=======================================================")
+    print("                  MÉTRICAS DO TURNO")
+    print("=======================================================")
+    print(f"  Quantidade de pressões lidas : {total_leituras_turno}")
+    print(f"  Média das pressões ajustadas : {media:.2f} UCPs")
+    print(f"  Menor pressão ajustada       : {menor_pressao:.2f} UCPs")
+    print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UCPs")
+    print("-------------------------------------------------------")
+    print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
+    print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
+    print(f"  Zona Vermelha : {zona_vermelha} leituras ({porcentagem_vermelha:.2f}%)")
+    print("-------------------------------------------------------")
+    if houve_travamento == 1:
+        print(f"  Leituras realizadas : {percentual_leituras:.2f}% do turno")
+    else:
+        print("  Sistema encerrado sem travamento")
+    print(f"  Diagnóstico         : {diagnostico}")
+    print("=======================================================")
+
+def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, soma_medias, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona):
     media_geral = soma_medias / total_turnos
-    porcentagem_verde_geral = soma_verde / total_turnos
+    porcentagem_verde_geral = total_zona_verde * 100 / total_leituras
+    porcentagem_amarela_geral = total_zona_amarela * 100 / total_leituras
+    porcentagem_vermelha_geral = total_zona_vermelha * 100 / total_leituras
 
-    print("")
-    print("\n=== MÉTRICAS TOTAIS ===")
-    print("Total de turnos realizados: {}".format(total_turnos))
-    print("Total de leituras realizadas: {}".format(total_leituras))
-    print("Menor pressão global: {:.2f}".format(menor_pressao_global))
-    print("Média geral das pressões ajustadas: {:.2f}".format(media_geral))
-    print("Porcentagem geral de leituras na zona verde: {:.2f}%".format(porcentagem_verde_geral))
-    print("Turnos com travamento: {}".format(total_travamentos))
+    if total_travamentos > 0:
+        diagnostico = "OPERAÇÃO COM INTERRUPÇÕES DE SEGURANÇA"
+    elif total_zona_vermelha > 0:
+        diagnostico = "OPERAÇÃO INSTÁVEL"
+    elif total_mudancas_zona > 0:
+        diagnostico = "OPERAÇÃO EM OBSERVAÇÃO"
+    else:
+        diagnostico = "OPERAÇÃO ESTÁVEL"
+
+    print("\n=======================================================")
+    print("                   MÉTRICAS TOTAIS")
+    print("=======================================================")
+    print(f"  Total de turnos realizados   : {total_turnos}")
+    print(f"  Total de leituras realizadas : {total_leituras}")
+    print(f"  Média geral das pressões     : {media_geral:.2f} UCPs")
+    print(f"  Menor pressão global         : {menor_pressao_global:.2f} UCPs")
+    print(f"  Maior pressão global         : {maior_pressao_global:.2f} UCPs")
+    print("-------------------------------------------------------")
+    print(f"  Zona Verde    : {total_zona_verde} leituras ({porcentagem_verde_geral:.2f}%)")
+    print(f"  Zona Amarela  : {total_zona_amarela} leituras ({porcentagem_amarela_geral:.2f}%)")
+    print(f"  Zona Vermelha : {total_zona_vermelha} leituras ({porcentagem_vermelha_geral:.2f}%)")
+    print("-------------------------------------------------------")
+    print(f"  Turnos com travamento : {total_travamentos}")
+    print(f"  Diagnóstico geral     : {diagnostico}")
+    print("=======================================================")

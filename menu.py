@@ -5,23 +5,30 @@ from sub_menus import menu_inicial, menu_secundario
 
 def menu():
     executando_menu_um = 1
-    executando_menu_incial = 1
+    executando_menu_inicial = 1
     menor_pressao = None
+    maior_pressao = None
     media = None
-    porcentagem_verde = None
     percentual_leituras = None
     houve_travamento = None
-    quantidade = None
+    zona_verde = None
+    zona_amarela = None
+    zona_vermelha = None
+    mudancas_zona = None
 
     total_turnos = 0
     total_leituras = 0
     menor_pressao_global = None
+    maior_pressao_global = None
     soma_medias = 0
-    soma_verde = 0
     total_travamentos = 0
+    total_zona_verde = 0
+    total_zona_amarela = 0
+    total_zona_vermelha = 0
+    total_mudancas_zona = 0
 
-    while(executando_menu_um == 1):
-        if(executando_menu_incial == 1):
+    while executando_menu_um == 1:
+        if executando_menu_inicial == 1:
 
             menu_inicial()
 
@@ -29,14 +36,19 @@ def menu():
 
             match escolha:
                 case 1:
-                    menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade = ajuste_pressao()
-                    executando_menu_incial = 0
+                    menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona = ajuste_pressao()
+                    executando_menu_inicial = 0
                     total_turnos += 1
-                    total_leituras += quantidade
+                    total_leituras += zona_verde + zona_amarela + zona_vermelha
                     if menor_pressao_global is None or menor_pressao < menor_pressao_global:
                         menor_pressao_global = menor_pressao
+                    if maior_pressao_global is None or maior_pressao > maior_pressao_global:
+                        maior_pressao_global = maior_pressao
                     soma_medias += media
-                    soma_verde += porcentagem_verde
+                    total_zona_verde += zona_verde
+                    total_zona_amarela += zona_amarela
+                    total_zona_vermelha += zona_vermelha
+                    total_mudancas_zona += mudancas_zona
                     if houve_travamento == 1:
                         total_travamentos += 1
                 case 2:
@@ -52,27 +64,30 @@ def menu():
 
         match escolha_dois:
             case 1:
-                menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade = ajuste_pressao()
+                menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona = ajuste_pressao()
                 total_turnos += 1
-                total_leituras += quantidade
+                total_leituras += zona_verde + zona_amarela + zona_vermelha
                 if menor_pressao_global is None or menor_pressao < menor_pressao_global:
                     menor_pressao_global = menor_pressao
+                if maior_pressao_global is None or maior_pressao > maior_pressao_global:
+                    maior_pressao_global = maior_pressao
                 soma_medias += media
-                soma_verde += porcentagem_verde
+                total_zona_verde += zona_verde
+                total_zona_amarela += zona_amarela
+                total_zona_vermelha += zona_vermelha
+                total_mudancas_zona += mudancas_zona
                 if houve_travamento == 1:
                     total_travamentos += 1
             case 2:
                 if menor_pressao is not None:
-                    exibir_metricas_turno(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade)
+                    exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona)
                 else:
                     print("\nPor favor, insira as pressões primeiro (Opção 1) para ver as métricas.")
             case 3:
                 if total_turnos > 0:
-                    exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, soma_medias, soma_verde, total_travamentos)
+                    exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, soma_medias, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona)
                 else:
                     print("\nNenhum turno registrado ainda.")
             case 4:
                 executando_menu_um = 0
                 print("\nFinalizando o programa...")
-
-menu()
