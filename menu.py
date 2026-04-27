@@ -24,7 +24,11 @@ def validacao_opcao():
 
 def menu():
     executando_menu_um = 1
-    resultado = None
+    menor_pressao = None
+    media = None
+    porcentagem_verde = None
+    percentual_leituras = None
+    houve_travamento = None
 
     while(executando_menu_um == 1):
         menu_um()
