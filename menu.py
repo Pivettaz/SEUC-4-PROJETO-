@@ -45,7 +45,7 @@ def menu():
                     tela_creditos()
                 case 3:
                     executando_menu_um = 0
-                    print("\nFinalizando o programa...")
+                    print("\nFinalizando o sistema...")
 
         if executando_menu_um == 0:
             break
@@ -77,11 +77,11 @@ def menu():
                 if menor_pressao is not None:
                     exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona)
                 else:
-                    print("\nPor favor, insira as pressões primeiro (Opção 1) para ver as métricas.")
+                    print("\n[ERRO] Nenhum turno iniciado. Inicie um turno pela Opção 1 antes de ver as métricas.")
             case 3:
                 if total_turnos > 0:
                     exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, soma_medias, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona)
                 else:
-                    print("\nNenhum turno registrado ainda.")
+                    print("\n[ERRO] Nenhum turno registrado. Inicie um turno pela Opção 1.")
             case 4:
                 executando_menu_inicial = 1

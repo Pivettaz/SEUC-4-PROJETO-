@@ -12,9 +12,9 @@ def ler_quantidade():
                 executando_leitura = 0
                 return opcao
             else:
-                print("\nEntrada inválida. A quantidade mínima de leituras é 1.")
+                print("\n[ERRO] Quantidade inválida. O mínimo é 1 leitura por turno.")
         except ValueError:
-            print("\nEntrada inválida. Por favor, digite um número inteiro.")
+            print("\n[ERRO] Entrada inválida. Digite um número inteiro.")
 
 def ler_pressao():
     executando_leitura = 1
@@ -24,7 +24,7 @@ def ler_pressao():
             executando_leitura = 0
             return opcao
         except ValueError:
-            print("\nEntrada inválida. Por favor, digite um número inteiro.")
+            print("\n[ERRO] Entrada inválida. Digite um número inteiro.")
 
 def ajuste_pressao():
     quantidade = ler_quantidade()
