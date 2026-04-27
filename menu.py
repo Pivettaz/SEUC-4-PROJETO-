@@ -1,16 +1,7 @@
 from funcao_ajuste import ajuste_pressao
-from metricas import exibir_metricas, exibir_metricas_totais
+from metricas import exibir_metricas_totais, exibir_metricas_turno
 from validacoes import validacao_opcao
-
-def menu_inicial():
-    print("\n1 - Começar Turno")
-    print("2 - Sair")
-
-def menu_secundario():
-    print("\n1 - Começar Novo Turno")
-    print("2 - Mostrar Métricas do Turno Atual")
-    print("3 - Mostrar Métricas Totais")
-    print("4 - Sair")
+from sub_menus import menu_inicial, menu_secundario
 
 def menu():
     executando_menu_um = 1
@@ -72,7 +63,7 @@ def menu():
                     total_travamentos += 1
             case 2:
                 if menor_pressao is not None:
-                    exibir_metricas(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade)
+                    exibir_metricas_turno(menor_pressao, media, porcentagem_verde, percentual_leituras, houve_travamento, quantidade)
                 else:
                     print("\nPor favor, insira as pressões primeiro (Opção 1) para ver as métricas.")
             case 3:

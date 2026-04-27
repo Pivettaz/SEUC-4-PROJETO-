@@ -9,9 +9,9 @@ def ler_quantidade():
         try:
             opcao = int(input("Digite quantas leituras serão realizadas neste turno: "))
             executando_leitura = 0
+            return opcao
         except ValueError:
             print("\nEntrada inválida. Por favor, digite um número inteiro")
-    return opcao
 
 def ler_pressao():
     executando_leitura = 1
@@ -19,9 +19,9 @@ def ler_pressao():
         try:
             opcao = int(input("Digite a pressão em UPCs: "))
             executando_leitura = 0
+            return opcao
         except ValueError:
             print("\nEntrada inválida. Por favor, digite um número real ou inteiro")
-    return opcao
 
 def ajuste_pressao():
     quantidade = ler_quantidade()
