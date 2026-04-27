@@ -4,7 +4,7 @@ def validacao_opcao(min_value, max_value):
         try:
             escolha = int(input("\nDigite sua escolha: "))
             if min_value <= escolha <= max_value:
-                executando_entrada = 1
+                executando_entrada = 0
                 return escolha
             else:
                 print(f"Opção inválida. Por favor, escolha uma opção entre 1 e 3.")
