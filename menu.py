@@ -1,14 +1,8 @@
-from metricas_finais import metricas_finais
-from funcao_ajuste import ajuste_pressao
+from metricas_parciais import metricas
 
-def menu_principal():
+def menu_um():
     print("\n1 - Inserir Pressões")
-    print("2 - Métricas")
-    print("3 - Sair")
-
-def menu_alterado():
-    print("\n1 - Incluir mais pressões")
-    print("2 - Métricas")
+    print("2 - Mostrar Métricas Parciais")
     print("3 - Sair")
 
 def validacao_opcao(opcao):
@@ -16,22 +10,19 @@ def validacao_opcao(opcao):
         opcao = int(input("\nEscolha uma opção válida: "))
 
 def menu():
-    menu_principal()
-    escolha = int(input("\nDigite sua escolha: "))
+    executando_menu_um = 1
 
-    validacao_opcao(escolha)
+    while(executando_menu_um == 1):
+        menu_um()
+        escolha = int(input("\nDigite sua escolha: "))
 
-    while(escolha == 1 or escolha == 2):
+        validacao_opcao(escolha)
 
-        if (escolha == 1):
-            ajuste_pressao()
-        else:
-            metricas_finais()
-
-        menu_alterado()
-        escolha_dois = int(input("\nDigite sua escolha: "))
-
-        validacao_opcao(escolha_dois)
-
-menu()
+        match escolha:
+            case 1:
+                metricas()
+            case 2:
+                metricas()
+            case 3:
+                executando_menu_um = 0
 
