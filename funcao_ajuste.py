@@ -1,50 +1,15 @@
+from calculos import ajustar_pressao, calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_percentual_leituras
 from funcao_estabilidade import classificacao_estabilidade
-from validacoes import validacao_opcao
+from validacoes import validacao_opcao, ler_quantidade, ler_pressao
 from sub_menus import menu_pressoes
 from metricas import exibir_metricas_parciais
-
-def ler_quantidade():
-    executando_leitura = 1
-    while executando_leitura == 1:
-        try:
-            opcao = int(input("Digite quantas leituras serão realizadas neste turno: "))
-            if opcao >= 1:
-                executando_leitura = 0
-                return opcao
-            else:
-                print("\n[ERRO] Quantidade inválida. O mínimo é 1 leitura por turno.")
-        except ValueError:
-            print("\n[ERRO] Entrada inválida. Digite um número inteiro.")
-
-def ler_pressao(pressao):
-    executando_leitura = 1
-    while executando_leitura == 1:
-        try:
-            opcao = int(input(f"{pressao} - Digite a pressão em UPCs: "))
-            if opcao >= 0:
-                if opcao < 1000:
-                    executando_leitura = 0
-                    return opcao
-                else:
-                    print(f"\n[!] AVISO: {opcao} UPCs ultrapassa o limite operacional típico (999 UPCs).")
-                    print("    Confirme se a digitação está correta:")
-                    print("    1 - Sim, manter o valor")
-                    print("    2 - Não, redigitar")
-                    confirmacao = validacao_opcao(1, 2)
-                    if confirmacao == 1:
-                        executando_leitura = 0
-                        return opcao
-            else:
-                print("\n[ERRO] Não é possivel processar uma pressão negativa. Digite um número positivo.")
-        except ValueError:
-            print("\n[ERRO] Entrada inválida. Digite um número inteiro.")
 
 def ajuste_pressao():
     quantidade = ler_quantidade()
     soma = 0
     soma_quadrados = 0
-    menor_pressao = float("inf")
-    maior_pressao = float("-inf")
+    menor_pressao = 10000
+    maior_pressao = -10000
     zona_verde = 0
     zona_amarela = 0
     zona_vermelha = 0
@@ -57,16 +22,12 @@ def ajuste_pressao():
         leituras_realizadas += 1
         pressao = ler_pressao(i + 1)
 
-        if pressao > 150:
-            pressao_ajustada = pressao * 1.08
-        else:
-            pressao_ajustada = pressao * 0.96
+        pressao_ajustada = ajustar_pressao(pressao)
         soma += pressao_ajustada
         soma_quadrados += pressao_ajustada ** 2
 
         if pressao_ajustada < menor_pressao:
             menor_pressao = pressao_ajustada
-
         if pressao_ajustada > maior_pressao:
             maior_pressao = pressao_ajustada
 
@@ -104,19 +65,15 @@ def ajuste_pressao():
         opcao = validacao_opcao(1, 2)
 
         if opcao == 2:
-            media_parcial = soma / leituras_realizadas
-            variancia_parcial = (soma_quadrados/leituras_realizadas) - (media_parcial ** 2)
-            if variancia_parcial < 0:
-                variancia_parcial = 0
-            desvio_parcial = variancia_parcial ** 0.5
-            amplitude_parcial = maior_pressao - menor_pressao
+            media_parcial = calcular_media(soma, leituras_realizadas)
+            variancia_parcial = calcular_variancia(soma_quadrados, media_parcial, leituras_realizadas)
+            desvio_parcial = calcular_desvio_padrao(variancia_parcial)
+            amplitude_parcial = calcular_amplitude(maior_pressao, menor_pressao)
             exibir_metricas_parciais(leituras_realizadas, media_parcial, menor_pressao, maior_pressao, amplitude_parcial, desvio_parcial, zona_verde, zona_amarela, zona_vermelha, mudancas_zona)
 
-    media = soma / leituras_realizadas
-    variancia = (soma_quadrados / leituras_realizadas) - (media ** 2)
-    if variancia < 0:
-        variancia = 0
-    desvio_padrao = variancia ** 0.5
-    amplitude = maior_pressao - menor_pressao
-    percentual_leituras = (leituras_realizadas / quantidade) * 100
+    media = calcular_media(soma, leituras_realizadas)
+    variancia = calcular_variancia(soma_quadrados, media, leituras_realizadas)
+    desvio_padrao = calcular_desvio_padrao(variancia)
+    amplitude = calcular_amplitude(maior_pressao, menor_pressao)
+    percentual_leituras = calcular_percentual_leituras(leituras_realizadas, quantidade)
     return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona

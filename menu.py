@@ -2,6 +2,7 @@ from funcao_ajuste import ajuste_pressao
 from metricas import exibir_metricas_totais, exibir_metricas_turno
 from validacoes import validacao_opcao
 from sub_menus import menu_inicial, menu_secundario, tela_inicializacao, tela_creditos
+from calculos import atualizar_minimo, atualizar_maximo
 
 def menu():
     executando_menu_um = 1
@@ -70,10 +71,8 @@ def menu():
                 menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma_turno, soma_quadrados_turno, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona = ajuste_pressao()
                 total_turnos += 1
                 total_leituras += zona_verde + zona_amarela + zona_vermelha
-                if menor_pressao_global is None or menor_pressao < menor_pressao_global:
-                    menor_pressao_global = menor_pressao
-                if maior_pressao_global is None or maior_pressao > maior_pressao_global:
-                    maior_pressao_global = maior_pressao
+                menor_pressao_global = atualizar_minimo(menor_pressao_global, menor_pressao)
+                maior_pressao_global = atualizar_maximo(maior_pressao_global, maior_pressao)
                 total_soma_pressoes += soma_turno
                 total_soma_quadrados += soma_quadrados_turno
                 total_zona_verde += zona_verde

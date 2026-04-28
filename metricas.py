@@ -1,17 +1,9 @@
-def diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona):
-    if houve_travamento == 1:
-        return "TURNO INTERROMPIDO POR SEGURANÇA"
-    elif zona_vermelha > 0:
-        return "TURNO INSTÁVEL"
-    elif mudancas_zona > 0:
-        return "TURNO EM OBSERVAÇÃO"
-    else:
-        return "TURNO ESTÁVEL"
+from calculos import calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_porcentagem, diagnostico_turno, diagnostico_geral
 
 def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitude, desvio_padrao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
-    porcentagem_verde = zona_verde * 100 / cont
-    porcentagem_amarela = zona_amarela * 100 / cont
-    porcentagem_vermelha = zona_vermelha * 100 / cont
+    porcentagem_verde = calcular_porcentagem(zona_verde, cont)
+    porcentagem_amarela = calcular_porcentagem(zona_amarela, cont)
+    porcentagem_vermelha = calcular_porcentagem(zona_vermelha, cont)
     diagnostico = diagnostico_turno(0, zona_vermelha, mudancas_zona)
 
     print("\n=======================================================")
@@ -33,9 +25,9 @@ def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitud
 
 def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
     total_leituras_turno = zona_verde + zona_amarela + zona_vermelha
-    porcentagem_verde = zona_verde * 100 / total_leituras_turno
-    porcentagem_amarela = zona_amarela * 100 / total_leituras_turno
-    porcentagem_vermelha = zona_vermelha * 100 / total_leituras_turno
+    porcentagem_verde = calcular_porcentagem(zona_verde, total_leituras_turno)
+    porcentagem_amarela = calcular_porcentagem(zona_amarela, total_leituras_turno)
+    porcentagem_vermelha = calcular_porcentagem(zona_vermelha, total_leituras_turno)
     diagnostico = diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona)
 
     print("\n=======================================================")
@@ -60,24 +52,14 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     print("=======================================================")
 
 def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona):
-    media_geral = total_soma_pressoes / total_leituras
-    variancia_geral = (total_soma_quadrados / total_leituras) - (media_geral ** 2)
-    if variancia_geral < 0:
-        variancia_geral = 0
-    desvio_geral = variancia_geral ** 0.5
-    amplitude_geral = maior_pressao_global - menor_pressao_global
-    porcentagem_verde_geral = total_zona_verde * 100 / total_leituras
-    porcentagem_amarela_geral = total_zona_amarela * 100 / total_leituras
-    porcentagem_vermelha_geral = total_zona_vermelha * 100 / total_leituras
-
-    if total_travamentos > 0:
-        diagnostico = "OPERAÇÃO COM INTERRUPÇÕES DE SEGURANÇA"
-    elif total_zona_vermelha > 0:
-        diagnostico = "OPERAÇÃO INSTÁVEL"
-    elif total_mudancas_zona > 0:
-        diagnostico = "OPERAÇÃO EM OBSERVAÇÃO"
-    else:
-        diagnostico = "OPERAÇÃO ESTÁVEL"
+    media_geral = calcular_media(total_soma_pressoes, total_leituras)
+    variancia_geral = calcular_variancia(total_soma_quadrados, media_geral, total_leituras)
+    desvio_geral = calcular_desvio_padrao(variancia_geral)
+    amplitude_geral = calcular_amplitude(maior_pressao_global, menor_pressao_global)
+    porcentagem_verde_geral = calcular_porcentagem(total_zona_verde, total_leituras)
+    porcentagem_amarela_geral = calcular_porcentagem(total_zona_amarela, total_leituras)
+    porcentagem_vermelha_geral = calcular_porcentagem(total_zona_vermelha, total_leituras)
+    diagnostico = diagnostico_geral(total_travamentos, total_zona_vermelha, total_mudancas_zona)
 
     print("\n=======================================================")
     print("                   MÉTRICAS TOTAIS")
