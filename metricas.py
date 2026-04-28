@@ -8,7 +8,7 @@ def diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona):
     else:
         return "TURNO ESTÁVEL"
 
-def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitude, desvio_padrao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
     porcentagem_verde = zona_verde * 100 / cont
     porcentagem_amarela = zona_amarela * 100 / cont
     porcentagem_vermelha = zona_vermelha * 100 / cont
@@ -21,6 +21,8 @@ def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, zona_ver
     print(f"  Média das pressões ajustadas : {media:.2f} UPCs")
     print(f"  Menor pressão ajustada       : {menor_pressao:.2f} UPCs")
     print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UPCs")
+    print(f"  Amplitude (maior - menor)    : {amplitude:.2f} UPCs")
+    print(f"  Desvio padrão                : {desvio_padrao:.2f} UPCs")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
@@ -29,7 +31,7 @@ def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, zona_ver
     print(f"  Diagnóstico   : {diagnostico}")
     print("=======================================================")
 
-def exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
     total_leituras_turno = zona_verde + zona_amarela + zona_vermelha
     porcentagem_verde = zona_verde * 100 / total_leituras_turno
     porcentagem_amarela = zona_amarela * 100 / total_leituras_turno
@@ -43,6 +45,8 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leitur
     print(f"  Média das pressões ajustadas : {media:.2f} UPCs")
     print(f"  Menor pressão ajustada       : {menor_pressao:.2f} UPCs")
     print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UPCs")
+    print(f"  Amplitude (maior - menor)    : {amplitude:.2f} UPCs")
+    print(f"  Desvio padrão                : {desvio_padrao:.2f} UPCs")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
@@ -55,8 +59,13 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, percentual_leitur
     print(f"  Diagnóstico         : {diagnostico}")
     print("=======================================================")
 
-def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, soma_medias, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona):
-    media_geral = soma_medias / total_turnos
+def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona):
+    media_geral = total_soma_pressoes / total_leituras
+    variancia_geral = (total_soma_quadrados / total_leituras) - (media_geral ** 2)
+    if variancia_geral < 0:
+        variancia_geral = 0
+    desvio_geral = variancia_geral ** 0.5
+    amplitude_geral = maior_pressao_global - menor_pressao_global
     porcentagem_verde_geral = total_zona_verde * 100 / total_leituras
     porcentagem_amarela_geral = total_zona_amarela * 100 / total_leituras
     porcentagem_vermelha_geral = total_zona_vermelha * 100 / total_leituras
@@ -78,6 +87,8 @@ def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, m
     print(f"  Média geral das pressões     : {media_geral:.2f} UPCs")
     print(f"  Menor pressão global         : {menor_pressao_global:.2f} UPCs")
     print(f"  Maior pressão global         : {maior_pressao_global:.2f} UPCs")
+    print(f"  Amplitude global             : {amplitude_geral:.2f} UPCs")
+    print(f"  Desvio padrão global         : {desvio_geral:.2f} UPCs")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {total_zona_verde} leituras ({porcentagem_verde_geral:.2f}%)")
     print(f"  Zona Amarela  : {total_zona_amarela} leituras ({porcentagem_amarela_geral:.2f}%)")
