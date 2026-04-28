@@ -16,11 +16,11 @@ def ler_quantidade():
         except ValueError:
             print("\n[ERRO] Entrada inválida. Digite um número inteiro.")
 
-def ler_pressao():
+def ler_pressao(pressao):
     executando_leitura = 1
     while executando_leitura == 1:
         try:
-            opcao = int(input("Digite a pressão em UPCs: "))
+            opcao = int(input(f"{pressao} - Digite a pressão em UPCs: "))
             executando_leitura = 0
             return opcao
         except ValueError:
@@ -41,7 +41,7 @@ def ajuste_pressao():
 
     for i in range(quantidade):
         leituras_realizadas += 1
-        pressao = ler_pressao()
+        pressao = ler_pressao(i + 1)
 
         if pressao > 150:
             pressao_ajustada = pressao * 1.08
