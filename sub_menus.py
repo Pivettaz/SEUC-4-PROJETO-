@@ -67,8 +67,18 @@ def menu_secundario():
     print("2 - Mostrar Métricas do Turno Atual")
     print("3 - Mostrar Métricas Totais")
     print("4 - Voltar à Tela de Acesso")
+    print("5 - Resetar Sessão (zerar todos os totais)")
 
 def menu_pressoes():
     print("\n-------------------------------------------------------")
     print("1 - Inserir pressão")
     print("2 - Métricas Parciais do Turno")
+    print("3 - Encerrar turno antecipadamente")
+
+def menu_review_travamento():
+    print("\n=======================================================")
+    print(" SEUC-4 | Refinaria Delta-9 | Revisão de Travamento")
+    print("=======================================================")
+    print("\n1 - Analisar causa do travamento")
+    print("2 - Mostrar métricas do turno interrompido")
+    print("3 - Voltar ao painel operacional")

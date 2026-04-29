@@ -1,4 +1,4 @@
-from calculos import ajustar_pressao, calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_percentual_leituras
+from calculos import ajustar_pressao, calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_percentual_leituras, descrever_resumo_leitura
 from funcao_estabilidade import classificacao_estabilidade
 from validacoes import validacao_opcao, ler_quantidade, ler_pressao
 from sub_menus import menu_pressoes
@@ -16,7 +16,12 @@ def ajuste_pressao():
     mudancas_zona = 0
     leituras_realizadas = 0
     zona_anterior = ""
+    pressao_ajustada_anterior = None
     houve_travamento = 0
+    encerramento_antecipado = 0
+    picos_vermelhos_isolados = 0
+    pressao_critica_anterior = None
+    pressao_critica_atual = None
 
     for i in range(quantidade):
         leituras_realizadas += 1
@@ -32,7 +37,8 @@ def ajuste_pressao():
             maior_pressao = pressao_ajustada
 
         zona = classificacao_estabilidade(pressao_ajustada)
-        print(f"Pressão ajustada: {pressao_ajustada:.2f} UPCs | Zona: {zona}")
+        print(descrever_resumo_leitura(pressao_ajustada, zona, pressao_ajustada_anterior))
+        pressao_ajustada_anterior = pressao_ajustada
 
         if zona == "Verde":
             zona_verde += 1
@@ -48,10 +54,13 @@ def ajuste_pressao():
             print("\n[!] ALERTA: Primeiro pico crítico detectado. Uma nova leitura vermelha consecutiva causará travamento.")
 
         if (zona == "Verde" and zona_anterior == "Vermelha") or (zona == "Amarela" and zona_anterior == "Vermelha"):
+            picos_vermelhos_isolados += 1
             print("\n[i] INFORMATIVO: Pico crítico isolado. Sequência de risco encerrada.")
 
         if zona == "Vermelha" and zona_anterior == "Vermelha":
             houve_travamento = 1
+            pressao_critica_anterior = pressao_ajustada_anterior
+            pressao_critica_atual = pressao_ajustada
             print("\n[X] PROTOCOLO DE TRAVAMENTO: Duas leituras seguidas de pressões na zona vermelha")
             break
 
@@ -62,18 +71,28 @@ def ajuste_pressao():
             break
 
         menu_pressoes()
-        opcao = validacao_opcao(1, 2)
+        opcao = validacao_opcao(1, 3)
 
         if opcao == 2:
             media_parcial = calcular_media(soma, leituras_realizadas)
             variancia_parcial = calcular_variancia(soma_quadrados, media_parcial, leituras_realizadas)
             desvio_parcial = calcular_desvio_padrao(variancia_parcial)
             amplitude_parcial = calcular_amplitude(maior_pressao, menor_pressao)
-            exibir_metricas_parciais(leituras_realizadas, media_parcial, menor_pressao, maior_pressao, amplitude_parcial, desvio_parcial, zona_verde, zona_amarela, zona_vermelha, mudancas_zona)
+            exibir_metricas_parciais(leituras_realizadas, media_parcial, menor_pressao, maior_pressao, amplitude_parcial, desvio_parcial, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados)
+
+        if opcao == 3:
+            print("\nDeseja realmente encerrar o turno antecipadamente?")
+            print("1 - Sim")
+            print("2 - Não")
+            confirmacao_encerramento = validacao_opcao(1, 2)
+            if confirmacao_encerramento == 1:
+                encerramento_antecipado = 1
+                print("\n[!] Turno encerrado antecipadamente pelo operador.")
+                break
 
     media = calcular_media(soma, leituras_realizadas)
     variancia = calcular_variancia(soma_quadrados, media, leituras_realizadas)
     desvio_padrao = calcular_desvio_padrao(variancia)
     amplitude = calcular_amplitude(maior_pressao, menor_pressao)
     percentual_leituras = calcular_percentual_leituras(leituras_realizadas, quantidade)
-    return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona
+    return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, encerramento_antecipado, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual

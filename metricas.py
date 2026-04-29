@@ -1,6 +1,6 @@
-from calculos import calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_porcentagem, diagnostico_turno, diagnostico_geral
+from calculos import META_PRESSAO, calcular_media, calcular_variancia, calcular_desvio_padrao, calcular_amplitude, calcular_porcentagem, diagnostico_turno, diagnostico_geral, descrever_desvio_meta
 
-def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitude, desvio_padrao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitude, desvio_padrao, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados):
     porcentagem_verde = calcular_porcentagem(zona_verde, cont)
     porcentagem_amarela = calcular_porcentagem(zona_amarela, cont)
     porcentagem_vermelha = calcular_porcentagem(zona_vermelha, cont)
@@ -15,15 +15,18 @@ def exibir_metricas_parciais(cont, media, menor_pressao, maior_pressao, amplitud
     print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UPCs")
     print(f"  Amplitude (maior - menor)    : {amplitude:.2f} UPCs")
     print(f"  Desvio padrão                : {desvio_padrao:.2f} UPCs")
+    print(f"  Pressão alvo (meta)          : {META_PRESSAO} UPCs")
+    print(f"  {descrever_desvio_meta(media)}")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
     print(f"  Zona Vermelha : {zona_vermelha} leituras ({porcentagem_vermelha:.2f}%)")
+    print(f"  Picos vermelhos isolados : {picos_vermelhos_isolados}")
     print("-------------------------------------------------------")
     print(f"  Diagnóstico   : {diagnostico}")
     print("=======================================================")
 
-def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona):
+def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, encerramento_antecipado, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados):
     total_leituras_turno = zona_verde + zona_amarela + zona_vermelha
     porcentagem_verde = calcular_porcentagem(zona_verde, total_leituras_turno)
     porcentagem_amarela = calcular_porcentagem(zona_amarela, total_leituras_turno)
@@ -39,19 +42,24 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     print(f"  Maior pressão ajustada       : {maior_pressao:.2f} UPCs")
     print(f"  Amplitude (maior - menor)    : {amplitude:.2f} UPCs")
     print(f"  Desvio padrão                : {desvio_padrao:.2f} UPCs")
+    print(f"  Pressão alvo (meta)          : {META_PRESSAO} UPCs")
+    print(f"  {descrever_desvio_meta(media)}")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  Zona Amarela  : {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
     print(f"  Zona Vermelha : {zona_vermelha} leituras ({porcentagem_vermelha:.2f}%)")
+    print(f"  Picos vermelhos isolados : {picos_vermelhos_isolados}")
     print("-------------------------------------------------------")
     if houve_travamento == 1:
-        print(f"  Leituras realizadas : {percentual_leituras:.2f}% do turno")
+        print(f"  Leituras realizadas : {percentual_leituras:.2f}% do turno (TRAVAMENTO)")
+    elif encerramento_antecipado == 1:
+        print(f"  Leituras realizadas : {percentual_leituras:.2f}% do turno (ENCERRADO ANTECIPADAMENTE)")
     else:
         print("  Sistema encerrado sem travamento")
     print(f"  Diagnóstico         : {diagnostico}")
     print("=======================================================")
 
-def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona):
+def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_encerramentos_antecipados, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona, total_picos_isolados):
     media_geral = calcular_media(total_soma_pressoes, total_leituras)
     variancia_geral = calcular_variancia(total_soma_quadrados, media_geral, total_leituras)
     desvio_geral = calcular_desvio_padrao(variancia_geral)
@@ -71,11 +79,15 @@ def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, m
     print(f"  Maior pressão global         : {maior_pressao_global:.2f} UPCs")
     print(f"  Amplitude global             : {amplitude_geral:.2f} UPCs")
     print(f"  Desvio padrão global         : {desvio_geral:.2f} UPCs")
+    print(f"  Pressão alvo (meta)          : {META_PRESSAO} UPCs")
+    print(f"  {descrever_desvio_meta(media_geral)}")
     print("-------------------------------------------------------")
     print(f"  Zona Verde    : {total_zona_verde} leituras ({porcentagem_verde_geral:.2f}%)")
     print(f"  Zona Amarela  : {total_zona_amarela} leituras ({porcentagem_amarela_geral:.2f}%)")
     print(f"  Zona Vermelha : {total_zona_vermelha} leituras ({porcentagem_vermelha_geral:.2f}%)")
+    print(f"  Picos vermelhos isolados : {total_picos_isolados}")
     print("-------------------------------------------------------")
-    print(f"  Turnos com travamento : {total_travamentos}")
-    print(f"  Diagnóstico geral     : {diagnostico}")
+    print(f"  Turnos com travamento            : {total_travamentos}")
+    print(f"  Turnos encerrados antecipadamente: {total_encerramentos_antecipados}")
+    print(f"  Diagnóstico geral                : {diagnostico}")
     print("=======================================================")

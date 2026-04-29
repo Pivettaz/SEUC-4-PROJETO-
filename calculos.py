@@ -1,7 +1,25 @@
+META_PRESSAO = 150
+
 def ajustar_pressao(pressao):
-    if pressao > 150:
+    if pressao > META_PRESSAO:
         return pressao * 1.08
-    return pressao * 0.96
+    else:
+        return pressao * 0.96
+
+def descrever_resumo_leitura(pressao_ajustada, zona, pressao_anterior):
+    if pressao_anterior is None:
+        return f"Última leitura: {pressao_ajustada:.2f} UPCs ({zona})"
+    variacao = pressao_ajustada - pressao_anterior
+    return f"Última leitura: {pressao_ajustada:.2f} UPCs ({zona}) | Variação: {variacao:+.2f} UPCs"
+
+def descrever_desvio_meta(media):
+    desvio = media - META_PRESSAO
+    if desvio > 0:
+        return f"Operação esteve {desvio:.2f} UPCs acima da meta em média"
+    elif desvio < 0:
+        return f"Operação esteve {-desvio:.2f} UPCs abaixo da meta em média"
+    else:
+        return "Operação esteve exatamente na meta em média"
 
 def calcular_media(soma, n):
     return soma / n
