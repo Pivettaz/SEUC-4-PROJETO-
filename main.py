@@ -16,30 +16,30 @@ def aguardar_continuar():
     input("\nPressione ENTER para continuar...")
 
 def calcular_media(soma, n):
-    return soma / n
+    return soma/n
 
-def calcular_variancia(soma_quadrados, media, n):
-    variancia = (soma_quadrados / n) - (media ** 2)
+def calcular_variancia(soma_quadrados,media,n):
+    variancia = (soma_quadrados/n) - (media**2)
     if variancia < 0:
         variancia = 0
     return variancia
 
 def calcular_desvio_padrao(variancia):
-    return variancia ** 0.5
+    return variancia**0.5
 
-def calcular_amplitude(maior, menor):
-    return maior - menor
+def calcular_amplitude(maior,menor):
+    return maior-menor
 
-def calcular_porcentagem(parte, total):
-    return (parte / total) * 100
+def calcular_porcentagem(parte,total):
+    return (parte/total) * 100
 
-def atualizar_minimo(atual, novo):
-    if atual is None or novo < atual:
+def atualizar_minimo(atual,novo):
+    if atual is None or novo<atual:
         return novo
     return atual
 
-def atualizar_maximo(atual, novo):
-    if atual is None or novo > atual:
+def atualizar_maximo(atual,novo):
+    if atual is None or novo>atual:
         return novo
     return atual
 
@@ -57,7 +57,7 @@ def classificacao_estabilidade(pressao):
     else:
         return "Vermelha"
 
-def calcular_tendencia(primeira_leitura, ultima_leitura):
+def calcular_tendencia(primeira_leitura,ultima_leitura):
     if primeira_leitura is None:
         return Fore.WHITE + "INDISPONÍVEL"
     diferenca = ultima_leitura - primeira_leitura
@@ -70,35 +70,49 @@ def calcular_tendencia(primeira_leitura, ultima_leitura):
 
 def banner_pressao(pressao_ajustada):
     largura = 50
-    posicao = int((pressao_ajustada - 100) / 4)
+    pressao_minima = 0
+    pressao_maxima = 300
+    upc_por_igual = (pressao_maxima-pressao_minima)/largura
+
+    limite_verde_inicio = 120
+    limite_verde_fim = 180
+    limite_vermelho = 250
+
+    coluna_verde_inicio = int((limite_verde_inicio - pressao_minima) / upc_por_igual)
+    coluna_verde_fim = int((limite_verde_fim - pressao_minima) / upc_por_igual)
+    coluna_vermelha = int((limite_vermelho - pressao_minima) / upc_por_igual)
+
+    posicao = int((pressao_ajustada - pressao_minima) / upc_por_igual)
     if posicao < 0:
         posicao = 0
-    if posicao > largura - 1:
-        posicao = largura - 1
+    if posicao > largura-1:
+        posicao = largura-1
 
     barra = ""
     i = 0
     while i < largura:
-        if i < 5:
-            barra = barra + Fore.YELLOW + "="
-        elif i < 20:
-            barra = barra + Fore.GREEN + "="
-        elif i < 37:
-            barra = barra + Fore.YELLOW + "="
+        if i < coluna_verde_inicio:
+            barra += Fore.YELLOW + "="
+        elif i < coluna_verde_fim:
+            barra += Fore.GREEN + "="
+        elif i < coluna_vermelha:
+            barra += Fore.YELLOW + "="
         else:
-            barra = barra + Fore.RED + "="
-        i = i + 1
+            barra += Fore.RED + "="
+        i += 1
 
     marcador = ""
     j = 0
-    while j < posicao:
-        marcador = marcador + " "
-        j = j + 1
-    marcador = marcador + Style.BRIGHT + Fore.WHITE + "^"
+    while j < largura:
+        if j == posicao:
+            marcador += Style.BRIGHT + Fore.WHITE + "^"
+        else:
+            marcador += " "
+        j += 1
 
-    return "  " + barra + "\n  " + marcador
+    return f"{barra}\n{marcador}"
 
-def descrever_resumo_leitura(pressao_ajustada, zona, pressao_anterior):
+def descrever_resumo_leitura(pressao_ajustada,zona,pressao_anterior):
     if zona == "Verde":
         cor_zona = Fore.GREEN
     elif zona == "Amarela":
