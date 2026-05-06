@@ -4,6 +4,7 @@ from colorama import init, Fore, Style
 init(autoreset=True)
 
 META_PRESSAO = 150
+LIMIAR_ESTABILIDADE = 5
 
 def limpar_terminal():
     if os.name == "nt":
@@ -60,10 +61,12 @@ def calcular_tendencia(primeira_leitura, ultima_leitura):
     if primeira_leitura is None:
         return Fore.WHITE + "INDISPONÍVEL"
     diferenca = ultima_leitura - primeira_leitura
-    if -5 < diferenca < 5:
+    if -LIMIAR_ESTABILIDADE < diferenca < LIMIAR_ESTABILIDADE:
         return Fore.GREEN + "ESTÁVEL"
+    elif diferenca >= LIMIAR_ESTABILIDADE:
+        return Fore.YELLOW + "EM ALTA"
     else:
-        return Fore.YELLOW + "DEGRADANDO"
+        return Fore.YELLOW + "EM QUEDA"
 
 def banner_pressao(pressao_ajustada):
     largura = 50
@@ -303,15 +306,15 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     print(Style.BRIGHT + Fore.CYAN + "\n=======================================================")
     print(Style.BRIGHT + Fore.CYAN + "                  MÉTRICAS DO TURNO")
     print(Style.BRIGHT + Fore.CYAN + "=======================================================")
-    print(f"  Quantidade de pressões lidas : {Style.BRIGHT}{total_leituras_turno}")
-    print(f"  Média das pressões ajustadas : {Style.BRIGHT}{media:.2f} UPCs")
-    print(f"  Menor pressão ajustada       : {Style.BRIGHT}{menor_pressao:.2f} UPCs")
-    print(f"  Maior pressão ajustada       : {Style.BRIGHT}{maior_pressao:.2f} UPCs")
-    print(f"  Amplitude (maior - menor)    : {Style.BRIGHT}{amplitude:.2f} UPCs")
-    print(f"  Desvio padrão                : {Style.BRIGHT}{desvio_padrao:.2f} UPCs")
-    print(f"  Pressão alvo (meta)          : {Style.BRIGHT}{META_PRESSAO} UPCs")
+    print(f"  Quantidade de leituras realizadas : {Style.BRIGHT}{total_leituras_turno}")
+    print(f"  Média das pressões ajustadas      : {Style.BRIGHT}{media:.2f} UPCs")
+    print(f"  Menor pressão ajustada            : {Style.BRIGHT}{menor_pressao:.2f} UPCs")
+    print(f"  Maior pressão ajustada            : {Style.BRIGHT}{maior_pressao:.2f} UPCs")
+    print(f"  Amplitude (maior - menor)         : {Style.BRIGHT}{amplitude:.2f} UPCs")
+    print(f"  Desvio padrão                     : {Style.BRIGHT}{desvio_padrao:.2f} UPCs")
+    print(f"  Pressão alvo (meta)               : {Style.BRIGHT}{META_PRESSAO} UPCs")
     print(f"  {descrever_desvio_meta(media)}")
-    print(f"  Tendência operacional        : {Style.BRIGHT}{tendencia}")
+    print(f"  Tendência operacional             : {Style.BRIGHT}{tendencia}")
     print(Style.DIM + "-------------------------------------------------------")
     print(f"  {Fore.GREEN}Zona Verde    {Style.RESET_ALL}: {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  {Fore.YELLOW}Zona Amarela  {Style.RESET_ALL}: {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
@@ -321,7 +324,7 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     if houve_travamento == 1:
         print(f"  Leituras realizadas : {Style.BRIGHT}{percentual_leituras:.2f}%{Style.RESET_ALL} do turno {Style.BRIGHT}{Fore.RED}(TRAVAMENTO)")
     else:
-        print(Fore.GREEN + "  Sistema encerrado sem travamento")
+        print(Fore.GREEN + "  Turno encerrado sem travamento")
     print(f"  Diagnóstico         : {Style.BRIGHT}{diagnostico}")
     print(Style.BRIGHT + Fore.CYAN + "=======================================================")
 
