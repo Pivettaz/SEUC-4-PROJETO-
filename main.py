@@ -30,10 +30,7 @@ def calcular_amplitude(maior, menor):
     return maior - menor
 
 def calcular_porcentagem(parte, total):
-    return parte * 100 / total
-
-def calcular_percentual_leituras(realizadas, quantidade):
-    return (realizadas / quantidade) * 100
+    return (parte / total) * 100
 
 def atualizar_minimo(atual, novo):
     if atual is None or novo < atual:
@@ -52,7 +49,7 @@ def ajustar_pressao(pressao):
         return pressao * 0.96
 
 def classificacao_estabilidade(pressao):
-    if (120 <= pressao <= 180):
+    if 120 <= pressao <= 180:
         return "Verde"
     elif pressao <= 250:
         return "Amarela"
@@ -63,7 +60,7 @@ def calcular_tendencia(primeira_leitura, ultima_leitura):
     if primeira_leitura is None:
         return Fore.WHITE + "INDISPONÍVEL"
     diferenca = ultima_leitura - primeira_leitura
-    if diferenca < 5 and diferenca > -5:
+    if -5 < diferenca < 5:
         return Fore.GREEN + "ESTÁVEL"
     else:
         return Fore.YELLOW + "DEGRADANDO"
@@ -161,7 +158,6 @@ def validacao_opcao(min_value, max_value):
         if entrada.isdigit():
             escolha = int(entrada)
             if min_value <= escolha <= max_value:
-                executando_entrada = 0
                 return escolha
             else:
                 print(Fore.RED + f"\n[X] ERRO: Opção inválida. Escolha uma opção entre {min_value} e {max_value}.")
@@ -175,7 +171,6 @@ def ler_quantidade():
         if entrada.isdigit():
             quantidade = int(entrada)
             if quantidade >= 1:
-                executando_leitura = 0
                 return quantidade
             else:
                 print(Fore.RED + "\n[X] ERRO: Quantidade inválida. O mínimo é 1 leitura por turno.")
@@ -189,7 +184,6 @@ def ler_pressao(numero_leitura, total_leituras):
         if entrada.isdigit():
             pressao = int(entrada)
             if pressao < 1000:
-                executando_leitura = 0
                 return pressao
             else:
                 print(Fore.YELLOW + f"\n[!] AVISO: {pressao} UPCs ultrapassa o limite operacional típico (999 UPCs).")
@@ -198,7 +192,6 @@ def ler_pressao(numero_leitura, total_leituras):
                 print("    2 - Não, redigitar")
                 confirmacao = validacao_opcao(1, 2)
                 if confirmacao == 1:
-                    executando_leitura = 0
                     return pressao
         else:
             print(Fore.RED + "\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
@@ -207,14 +200,14 @@ def executar_turno():
     quantidade = ler_quantidade()
     soma = 0
     soma_quadrados = 0
-    menor_pressao = 10000
-    maior_pressao = -10000
+    menor_pressao = None
+    maior_pressao = None
     zona_verde = 0
     zona_amarela = 0
     zona_vermelha = 0
     mudancas_zona = 0
     leituras_realizadas = 0
-    zona_anterior = ""
+    zona_anterior = None
     pressao_ajustada_anterior = None
     houve_travamento = 0
     picos_vermelhos_isolados = 0
@@ -235,10 +228,8 @@ def executar_turno():
             primeira_leitura_ajustada = pressao_ajustada
         ultima_leitura_ajustada = pressao_ajustada
 
-        if pressao_ajustada < menor_pressao:
-            menor_pressao = pressao_ajustada
-        if pressao_ajustada > maior_pressao:
-            maior_pressao = pressao_ajustada
+        menor_pressao = atualizar_minimo(menor_pressao, pressao_ajustada)
+        maior_pressao = atualizar_maximo(maior_pressao, pressao_ajustada)
 
         zona = classificacao_estabilidade(pressao_ajustada)
         print(descrever_resumo_leitura(pressao_ajustada, zona, pressao_ajustada_anterior))
@@ -251,13 +242,13 @@ def executar_turno():
         elif zona == "Vermelha":
             zona_vermelha += 1
 
-        if zona_anterior != "" and zona != zona_anterior:
+        if zona_anterior is not None and zona != zona_anterior:
             mudancas_zona += 1
 
         if zona == "Vermelha" and zona_anterior != "Vermelha" and i != quantidade - 1:
             print(Fore.YELLOW + "\n[!] ALERTA: Primeiro pico crítico detectado. Uma nova leitura vermelha consecutiva causará travamento.")
 
-        if (zona == "Verde" and zona_anterior == "Vermelha") or (zona == "Amarela" and zona_anterior == "Vermelha"):
+        if zona_anterior == "Vermelha" and zona != "Vermelha":
             picos_vermelhos_isolados += 1
             print(Fore.BLUE + "\n[i] INFORMATIVO: Pico crítico isolado. Sequência de risco encerrada.")
 
@@ -278,7 +269,7 @@ def executar_turno():
     variancia = calcular_variancia(soma_quadrados, media, leituras_realizadas)
     desvio_padrao = calcular_desvio_padrao(variancia)
     amplitude = calcular_amplitude(maior_pressao, menor_pressao)
-    percentual_leituras = calcular_percentual_leituras(leituras_realizadas, quantidade)
+    percentual_leituras = calcular_porcentagem(leituras_realizadas, quantidade)
     tendencia = calcular_tendencia(primeira_leitura_ajustada, ultima_leitura_ajustada)
     return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual, tendencia
 
@@ -403,11 +394,11 @@ def menu():
         if houve_travamento == 1:
             escolha = validacao_opcao(1, 6)
         else:
-            escolha_lida = validacao_opcao(1, 5)
-            if escolha_lida >= 4:
-                escolha = escolha_lida + 1
-            else:
-                escolha = escolha_lida
+            escolha = validacao_opcao(1, 5)
+            if escolha == 4:
+                escolha = 5
+            elif escolha == 5:
+                escolha = 6
 
         limpar_terminal()
 
