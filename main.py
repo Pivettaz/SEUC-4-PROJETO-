@@ -1,8 +1,6 @@
 import os
 from colorama import init, Fore, Style
-
 init(autoreset=True)
-
 META_PRESSAO = 150
 LIMIAR_ESTABILIDADE = 5
 
@@ -59,14 +57,14 @@ def classificacao_estabilidade(pressao):
 
 def calcular_tendencia(primeira_leitura,ultima_leitura):
     if primeira_leitura is None:
-        return Fore.WHITE + "INDISPONÍVEL"
+        return f"{Fore.WHITE}INDISPONÍVEL"
     diferenca = ultima_leitura - primeira_leitura
     if -LIMIAR_ESTABILIDADE < diferenca < LIMIAR_ESTABILIDADE:
-        return Fore.GREEN + "ESTÁVEL"
+        return f"{Fore.GREEN}ESTÁVEL"
     elif diferenca >= LIMIAR_ESTABILIDADE:
-        return Fore.YELLOW + "EM ALTA"
+        return f"{Fore.YELLOW}EM ALTA"
     else:
-        return Fore.YELLOW + "EM QUEDA"
+        return f"{Fore.YELLOW}EM QUEDA"
 
 def banner_pressao(pressao_ajustada):
     largura = 50
@@ -78,11 +76,11 @@ def banner_pressao(pressao_ajustada):
     limite_verde_fim = 180
     limite_vermelho = 250
 
-    coluna_verde_inicio = int((limite_verde_inicio - pressao_minima) / upc_por_igual)
-    coluna_verde_fim = int((limite_verde_fim - pressao_minima) / upc_por_igual)
-    coluna_vermelha = int((limite_vermelho - pressao_minima) / upc_por_igual)
+    coluna_verde_inicio = int((limite_verde_inicio-pressao_minima) / upc_por_igual)
+    coluna_verde_fim = int((limite_verde_fim-pressao_minima) / upc_por_igual)
+    coluna_vermelha = int((limite_vermelho-pressao_minima) / upc_por_igual)
 
-    posicao = int((pressao_ajustada - pressao_minima) / upc_por_igual)
+    posicao = int((pressao_ajustada-pressao_minima) / upc_por_igual)
     if posicao < 0:
         posicao = 0
     if posicao > largura-1:
@@ -92,20 +90,20 @@ def banner_pressao(pressao_ajustada):
     i = 0
     while i < largura:
         if i < coluna_verde_inicio:
-            barra += Fore.YELLOW + "="
+            barra += f"{Fore.YELLOW}="
         elif i < coluna_verde_fim:
-            barra += Fore.GREEN + "="
+            barra += f"{Fore.GREEN}="
         elif i < coluna_vermelha:
-            barra += Fore.YELLOW + "="
+            barra += f"{Fore.YELLOW}="
         else:
-            barra += Fore.RED + "="
+            barra += f"{Fore.RED}="
         i += 1
 
     marcador = ""
     j = 0
     while j < largura:
         if j == posicao:
-            marcador += Style.BRIGHT + Fore.WHITE + "^"
+            marcador += f"{Style.BRIGHT}{Fore.WHITE}^"
         else:
             marcador += " "
         j += 1
@@ -123,7 +121,7 @@ def descrever_resumo_leitura(pressao_ajustada,zona,pressao_anterior):
     if pressao_anterior is None:
         return ultima_leitura
     variacao = pressao_ajustada - pressao_anterior
-    return ultima_leitura + f" | Variação: {variacao:+.2f} UPCs"
+    return f"{ultima_leitura} | Variação: {variacao:+.2f} UPCs"
 
 def descrever_desvio_meta(media):
     desvio = media-META_PRESSAO
@@ -136,36 +134,28 @@ def descrever_desvio_meta(media):
 
 def diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona):
     if houve_travamento == 1:
-        return Fore.RED + "TURNO INTERROMPIDO POR SEGURANÇA"
+        return f"{Fore.RED}TURNO INTERROMPIDO POR SEGURANÇA"
     elif zona_vermelha > 0:
-        return Fore.YELLOW + "TURNO INSTÁVEL"
+        return f"{Fore.YELLOW}TURNO INSTÁVEL"
     elif mudancas_zona > 0:
-        return Fore.CYAN + "TURNO EM OBSERVAÇÃO"
+        return f"{Fore.CYAN}TURNO EM OBSERVAÇÃO"
     else:
-        return Fore.GREEN + "TURNO ESTÁVEL"
+        return f"{Fore.GREEN}TURNO ESTÁVEL"
 
 def diagnostico_geral(total_travamentos, total_zona_vermelha, total_mudancas_zona):
     if total_travamentos > 0:
-        return Fore.RED + "OPERAÇÃO COM INTERRUPÇÕES DE SEGURANÇA"
+        return f"{Fore.RED}OPERAÇÃO COM INTERRUPÇÕES DE SEGURANÇA"
     elif total_zona_vermelha > 0:
-        return Fore.YELLOW + "OPERAÇÃO INSTÁVEL"
+        return f"{Fore.YELLOW}OPERAÇÃO INSTÁVEL"
     elif total_mudancas_zona > 0:
-        return Fore.CYAN + "OPERAÇÃO EM OBSERVAÇÃO"
+        return f"{Fore.CYAN}OPERAÇÃO EM OBSERVAÇÃO"
     else:
-        return Fore.GREEN + "OPERAÇÃO ESTÁVEL"
+        return f"{Fore.GREEN}OPERAÇÃO ESTÁVEL"
 
 def estado_inicial_turno():
-    # Ordem: menor_pressao, maior_pressao, media, amplitude, desvio_padrao,
-    # percentual_leituras, houve_travamento, zona_verde, zona_amarela,
-    # zona_vermelha, mudancas_zona, picos_vermelhos_isolados,
-    # pressao_critica_anterior, pressao_critica_atual, tendencia
     return None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
 
 def estado_inicial_totais():
-    # Ordem: total_turnos, total_leituras, menor_pressao_global, maior_pressao_global,
-    # total_soma_pressoes, total_soma_quadrados, total_travamentos,
-    # total_zona_verde, total_zona_amarela, total_zona_vermelha,
-    # total_mudancas_zona, total_picos_isolados
     return 0, 0, None, None, 0, 0, 0, 0, 0, 0, 0, 0
 
 def validacao_opcao(min_value, max_value):
@@ -177,9 +167,9 @@ def validacao_opcao(min_value, max_value):
             if min_value <= escolha <= max_value:
                 return escolha
             else:
-                print(Fore.RED + f"\n[X] ERRO: Opção inválida. Escolha uma opção entre {min_value} e {max_value}.")
+                print(f"{Fore.RED}\n[X] ERRO: Opção inválida. Escolha uma opção entre {min_value} e {max_value}.")
         else:
-            print(Fore.RED + "\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
+            print(f"{Fore.RED}\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
 
 def ler_quantidade():
     executando_leitura = 1
@@ -190,9 +180,9 @@ def ler_quantidade():
             if quantidade >= 1:
                 return quantidade
             else:
-                print(Fore.RED + "\n[X] ERRO: Quantidade inválida. O mínimo é 1 leitura por turno.")
+                print(f"{Fore.RED}\n[X] ERRO: Quantidade inválida. O mínimo é 1 leitura por turno.")
         else:
-            print(Fore.RED + "\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
+            print(f"{Fore.RED}\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
 
 def ler_pressao(numero_leitura, total_leituras):
     executando_leitura = 1
@@ -203,7 +193,7 @@ def ler_pressao(numero_leitura, total_leituras):
             if pressao < 1000:
                 return pressao
             else:
-                print(Fore.YELLOW + f"\n[!] AVISO: {pressao} UPCs ultrapassa o limite operacional típico (1000 UPCs).")
+                print(f"{Fore.YELLOW}\n[!] AVISO: {pressao} UPCs ultrapassa o limite operacional típico (1000 UPCs).")
                 print("    Confirme se a digitação está correta:")
                 print("    1 - Sim, manter o valor")
                 print("    2 - Não, redigitar")
@@ -211,7 +201,7 @@ def ler_pressao(numero_leitura, total_leituras):
                 if confirmacao == 1:
                     return pressao
         else:
-            print(Fore.RED + "\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
+            print(f"{Fore.RED}\n[X] ERRO: Entrada inválida. Digite um número inteiro não negativo.")
 
 def executar_turno():
     quantidade = ler_quantidade()
@@ -263,24 +253,24 @@ def executar_turno():
             mudancas_zona += 1
 
         if zona == "Vermelha" and zona_anterior != "Vermelha" and i != quantidade - 1:
-            print(Fore.YELLOW + "\n[!] ALERTA: Primeiro pico crítico detectado. Uma nova leitura vermelha consecutiva causará travamento.")
+            print(f"{Fore.YELLOW}\n[!] ALERTA: Primeiro pico crítico detectado. Uma nova leitura vermelha consecutiva causará travamento.")
 
         if zona_anterior == "Vermelha" and zona != "Vermelha":
             picos_vermelhos_isolados += 1
-            print(Fore.BLUE + "\n[i] INFORMATIVO: Pico crítico isolado. Sequência de risco encerrada.")
+            print(f"{Fore.BLUE}\n[i] INFORMATIVO: Pico crítico isolado. Sequência de risco encerrada.")
 
         if zona == "Vermelha" and zona_anterior == "Vermelha":
             houve_travamento = 1
             pressao_critica_anterior = pressao_ajustada_anterior
             pressao_critica_atual = pressao_ajustada
-            print(Fore.RED + "\n[X] PROTOCOLO DE TRAVAMENTO: Duas leituras seguidas de pressões na zona vermelha")
+            print(f"{Fore.RED}\n[X] PROTOCOLO DE TRAVAMENTO: Duas leituras seguidas de pressões na zona vermelha")
             break
 
         zona_anterior = zona
         pressao_ajustada_anterior = pressao_ajustada
 
     if houve_travamento == 0:
-        print(Fore.GREEN + "\n[OK] Leituras do turno realizadas com sucesso!")
+        print(f"{Fore.GREEN}\n[OK] Leituras do turno realizadas com sucesso!")
 
     media = calcular_media(soma, leituras_realizadas)
     variancia = calcular_variancia(soma_quadrados, media, leituras_realizadas)
@@ -293,22 +283,22 @@ def executar_turno():
 def exibir_causa_travamento(pressao_critica_anterior, pressao_critica_atual):
     variacao = pressao_critica_atual-pressao_critica_anterior
 
-    print(Style.BRIGHT + Fore.RED + "\n=======================================================")
-    print(Style.BRIGHT + Fore.RED + "                 CAUSA DO TRAVAMENTO")
-    print(Style.BRIGHT + Fore.RED + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.RED}\n=======================================================")
+    print(f"{Style.BRIGHT}{Fore.RED}                 CAUSA DO TRAVAMENTO")
+    print(f"{Style.BRIGHT}{Fore.RED}=======================================================")
     print("  O sistema detectou DUAS leituras consecutivas na")
     print("  zona vermelha (acima de 250 UPCs), acionando o")
     print("  Protocolo de Travamento por segurança.")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     print("  Leituras críticas responsáveis pelo travamento:")
     print(f"    Penúltima leitura : {Style.BRIGHT}{Fore.RED}{pressao_critica_anterior:.2f} UPCs (Vermelha)")
     print(f"    Última leitura    : {Style.BRIGHT}{Fore.RED}{pressao_critica_atual:.2f} UPCs (Vermelha)")
     print(f"    Variação          : {Style.BRIGHT}{variacao:+.2f} UPCs")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     print("  Conforme protocolo SEUC-4, ao identificar duas")
     print("  pressões consecutivas acima do limite crítico, o")
     print("  turno é interrompido automaticamente.")
-    print(Style.BRIGHT + Fore.RED + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.RED}=======================================================")
 
 def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, tendencia):
     total_leituras_turno = zona_verde + zona_amarela + zona_vermelha
@@ -317,9 +307,9 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     porcentagem_vermelha = calcular_porcentagem(zona_vermelha, total_leituras_turno)
     diagnostico = diagnostico_turno(houve_travamento, zona_vermelha, mudancas_zona)
 
-    print(Style.BRIGHT + Fore.CYAN + "\n=======================================================")
-    print(Style.BRIGHT + Fore.CYAN + "                  MÉTRICAS DO TURNO")
-    print(Style.BRIGHT + Fore.CYAN + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}\n=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}                  MÉTRICAS DO TURNO")
+    print(f"{Style.BRIGHT}{Fore.CYAN}=======================================================")
     print(f"  Quantidade de leituras realizadas : {Style.BRIGHT}{total_leituras_turno}")
     print(f"  Média das pressões ajustadas      : {Style.BRIGHT}{media:.2f} UPCs")
     print(f"  Menor pressão ajustada            : {Style.BRIGHT}{menor_pressao:.2f} UPCs")
@@ -329,18 +319,18 @@ def exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio
     print(f"  Pressão alvo (meta)               : {Style.BRIGHT}{META_PRESSAO} UPCs")
     print(f"  {descrever_desvio_meta(media)}")
     print(f"  Tendência operacional             : {Style.BRIGHT}{tendencia}")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     print(f"  {Fore.GREEN}Zona Verde    {Style.RESET_ALL}: {zona_verde} leituras ({porcentagem_verde:.2f}%)")
     print(f"  {Fore.YELLOW}Zona Amarela  {Style.RESET_ALL}: {zona_amarela} leituras ({porcentagem_amarela:.2f}%)")
     print(f"  {Fore.RED}Zona Vermelha {Style.RESET_ALL}: {zona_vermelha} leituras ({porcentagem_vermelha:.2f}%)")
     print(f"  {Fore.RED}Picos vermelhos isolados {Style.RESET_ALL}: {Style.BRIGHT}{picos_vermelhos_isolados}")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     if houve_travamento == 1:
         print(f"  Leituras realizadas : {Style.BRIGHT}{percentual_leituras:.2f}%{Style.RESET_ALL} do turno {Style.BRIGHT}{Fore.RED}(TRAVAMENTO)")
     else:
-        print(Fore.GREEN + "  Turno encerrado sem travamento")
+        print(f"{Fore.GREEN}  Turno encerrado sem travamento")
     print(f"  Diagnóstico         : {Style.BRIGHT}{diagnostico}")
-    print(Style.BRIGHT + Fore.CYAN + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}=======================================================")
 
 def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona, total_picos_isolados):
     media_geral = calcular_media(total_soma_pressoes, total_leituras)
@@ -352,9 +342,9 @@ def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, m
     porcentagem_vermelha_geral = calcular_porcentagem(total_zona_vermelha, total_leituras)
     diagnostico = diagnostico_geral(total_travamentos, total_zona_vermelha, total_mudancas_zona)
 
-    print(Style.BRIGHT + Fore.CYAN + "\n=======================================================")
-    print(Style.BRIGHT + Fore.CYAN + "                   MÉTRICAS TOTAIS")
-    print(Style.BRIGHT + Fore.CYAN + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}\n=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}                   MÉTRICAS TOTAIS")
+    print(f"{Style.BRIGHT}{Fore.CYAN}=======================================================")
     print(f"  Total de turnos realizados   : {Style.BRIGHT}{total_turnos}")
     print(f"  Total de leituras realizadas : {Style.BRIGHT}{total_leituras}")
     print(f"  Média geral das pressões     : {Style.BRIGHT}{media_geral:.2f} UPCs")
@@ -364,40 +354,40 @@ def exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, m
     print(f"  Desvio padrão global         : {Style.BRIGHT}{desvio_geral:.2f} UPCs")
     print(f"  Pressão alvo (meta)          : {Style.BRIGHT}{META_PRESSAO} UPCs")
     print(f"  {descrever_desvio_meta(media_geral)}")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     print(f"  {Fore.GREEN}Zona Verde    {Style.RESET_ALL}: {total_zona_verde} leituras ({porcentagem_verde_geral:.2f}%)")
     print(f"  {Fore.YELLOW}Zona Amarela  {Style.RESET_ALL}: {total_zona_amarela} leituras ({porcentagem_amarela_geral:.2f}%)")
     print(f"  {Fore.RED}Zona Vermelha {Style.RESET_ALL}: {total_zona_vermelha} leituras ({porcentagem_vermelha_geral:.2f}%)")
     print(f"  {Fore.RED}Picos vermelhos isolados {Style.RESET_ALL}: {Style.BRIGHT}{total_picos_isolados}")
-    print(Style.DIM + "-------------------------------------------------------")
+    print(f"{Style.DIM}-------------------------------------------------------")
     print(f"  Turnos com travamento        : {Style.BRIGHT}{total_travamentos}")
     print(f"  Diagnóstico geral            : {Style.BRIGHT}{diagnostico}")
-    print(Style.BRIGHT + Fore.CYAN + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}=======================================================")
 
 def menu_principal(houve_travamento, total_turnos):
     if total_turnos == 0:
-        estado = Fore.WHITE + "AGUARDANDO TURNO"
+        estado = f"{Fore.WHITE}AGUARDANDO TURNO"
     elif houve_travamento == 1:
-        estado = Fore.RED + "ÚLTIMO TURNO: TRAVAMENTO"
+        estado = f"{Fore.RED}ÚLTIMO TURNO: TRAVAMENTO"
     else:
-        estado = Fore.GREEN + "ÚLTIMO TURNO: CONCLUÍDO"
+        estado = f"{Fore.GREEN}ÚLTIMO TURNO: CONCLUÍDO"
 
-    print(Style.BRIGHT + Fore.CYAN + "\n=======================================================")
-    print(Style.BRIGHT + Fore.CYAN + " SEUC-4 | Refinaria Delta-9 | Painel Operacional do DPE")
-    print(Style.BRIGHT + Fore.CYAN + "=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN}\n=======================================================")
+    print(f"{Style.BRIGHT}{Fore.CYAN} SEUC-4 | Refinaria Delta-9 | Painel Operacional do DPE")
+    print(f"{Style.BRIGHT}{Fore.CYAN}=======================================================")
     texto_turnos = "turno" if total_turnos == 1 else "turnos"
     print(f" Sessão: {Style.BRIGHT}{total_turnos}{Style.RESET_ALL} {texto_turnos} | {estado}")
-    print(Style.DIM + "-------------------------------------------------------")
-    print(Style.BRIGHT + " [1]" + Style.RESET_ALL + " Começar Novo Turno")
-    print(Style.BRIGHT + " [2]" + Style.RESET_ALL + " Mostrar Métricas do Turno Atual")
-    print(Style.BRIGHT + " [3]" + Style.RESET_ALL + " Mostrar Métricas Totais")
+    print(f"{Style.DIM}-------------------------------------------------------")
+    print(f"{Style.BRIGHT} [1]{Style.RESET_ALL} Começar Novo Turno")
+    print(f"{Style.BRIGHT} [2]{Style.RESET_ALL} Mostrar Métricas do Turno Atual")
+    print(f"{Style.BRIGHT} [3]{Style.RESET_ALL} Mostrar Métricas Totais")
     if houve_travamento == 1:
-        print(Style.BRIGHT + Fore.YELLOW + " [4]" + Style.RESET_ALL + " Causa do Travamento")
-        print(Style.BRIGHT + " [5]" + Style.RESET_ALL + " Resetar Sessão (zerar todos os totais)")
-        print(Style.BRIGHT + Fore.RED + " [6]" + Style.RESET_ALL + " Sair")
+        print(f"{Style.BRIGHT}{Fore.YELLOW} [4]{Style.RESET_ALL} Causa do Travamento")
+        print(f"{Style.BRIGHT} [5]{Style.RESET_ALL} Resetar Sessão (zerar todos os totais)")
+        print(f"{Style.BRIGHT}{Fore.RED} [6]{Style.RESET_ALL} Sair")
     else:
-        print(Style.BRIGHT + " [4]" + Style.RESET_ALL + " Resetar Sessão (zerar todos os totais)")
-        print(Style.BRIGHT + Fore.RED + " [5]" + Style.RESET_ALL + " Sair")
+        print(f"{Style.BRIGHT} [4]{Style.RESET_ALL} Resetar Sessão (zerar todos os totais)")
+        print(f"{Style.BRIGHT}{Fore.RED} [5]{Style.RESET_ALL} Sair")
 
 def menu():
     menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual, tendencia = estado_inicial_turno()
@@ -440,27 +430,27 @@ def menu():
                 if menor_pressao is not None:
                     exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, tendencia)
                 else:
-                    print(Fore.RED + "\n[X] ERRO: Nenhum turno iniciado. Inicie um turno pela Opção 1 antes de ver as métricas.")
+                    print(f"{Fore.RED}\n[X] ERRO: Nenhum turno iniciado. Inicie um turno pela Opção 1 antes de ver as métricas.")
                 aguardar_continuar()
             case 3:
                 if total_turnos > 0:
                     exibir_metricas_totais(total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona, total_picos_isolados)
                 else:
-                    print(Fore.RED + "\n[X] ERRO: Nenhum turno registrado. Inicie um turno pela Opção 1.")
+                    print(f"{Fore.RED}\n[X] ERRO: Nenhum turno registrado. Inicie um turno pela Opção 1.")
                 aguardar_continuar()
             case 4:
                 exibir_causa_travamento(pressao_critica_anterior, pressao_critica_atual)
                 aguardar_continuar()
             case 5:
                 if total_turnos == 0:
-                    print(Fore.RED + "\n[X] ERRO: Não há sessão para resetar. Nenhum turno foi registrado ainda.")
+                    print(f"{Fore.RED}\n[X] ERRO: Não há sessão para resetar. Nenhum turno foi registrado ainda.")
                 else:
                     menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual, tendencia = estado_inicial_turno()
                     total_turnos, total_leituras, menor_pressao_global, maior_pressao_global, total_soma_pressoes, total_soma_quadrados, total_travamentos, total_zona_verde, total_zona_amarela, total_zona_vermelha, total_mudancas_zona, total_picos_isolados = estado_inicial_totais()
-                    print(Fore.GREEN + "\n[OK] Sessão resetada. Todos os totais foram zerados.")
+                    print(f"{Fore.GREEN}\n[OK] Sessão resetada. Todos os totais foram zerados.")
                 aguardar_continuar()
             case 6:
-                print(Style.BRIGHT + Fore.CYAN + "\nFinalizando o sistema...")
+                print(f"{Style.BRIGHT}{Fore.CYAN}\nFinalizando o sistema...")
                 executando = 0
 
 menu()
