@@ -278,6 +278,7 @@ def executar_turno():
     amplitude = calcular_amplitude(maior_pressao, menor_pressao)
     percentual_leituras = calcular_porcentagem(leituras_realizadas, quantidade)
     tendencia = calcular_tendencia(primeira_leitura_ajustada, ultima_leitura_ajustada)
+    exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, tendencia)
     return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual, tendencia
 
 def exibir_causa_travamento(pressao_critica_anterior, pressao_critica_atual):
@@ -379,7 +380,7 @@ def menu_principal(houve_travamento, total_turnos):
     print(f" Sessão: {Style.BRIGHT}{total_turnos}{Style.RESET_ALL} {texto_turnos} | {estado}")
     print(f"{Style.DIM}-------------------------------------------------------")
     print(f"{Style.BRIGHT} [1]{Style.RESET_ALL} Começar Novo Turno")
-    print(f"{Style.BRIGHT} [2]{Style.RESET_ALL} Mostrar Métricas do Turno Atual")
+    print(f"{Style.BRIGHT} [2]{Style.RESET_ALL} Rever Métricas do Turno")
     print(f"{Style.BRIGHT} [3]{Style.RESET_ALL} Mostrar Métricas Totais")
     if houve_travamento == 1:
         print(f"{Style.BRIGHT}{Fore.YELLOW} [4]{Style.RESET_ALL} Causa do Travamento")
