@@ -59,7 +59,7 @@ def calcular_tendencia(primeira_leitura,ultima_leitura):
     if primeira_leitura is None:
         return f"{Fore.WHITE}INDISPONÍVEL"
     diferenca = ultima_leitura - primeira_leitura
-    if -LIMIAR_ESTABILIDADE < diferenca < LIMIAR_ESTABILIDADE:
+    if (-LIMIAR_ESTABILIDADE) < diferenca < LIMIAR_ESTABILIDADE:
         return f"{Fore.GREEN}ESTÁVEL"
     elif diferenca >= LIMIAR_ESTABILIDADE:
         return f"{Fore.YELLOW}EM ALTA"
