@@ -277,7 +277,10 @@ def executar_turno():
     desvio_padrao = calcular_desvio_padrao(variancia)
     amplitude = calcular_amplitude(maior_pressao, menor_pressao)
     percentual_leituras = calcular_porcentagem(leituras_realizadas, quantidade)
-    tendencia = calcular_tendencia(primeira_leitura_ajustada, ultima_leitura_ajustada)
+    if houve_travamento == 1:
+        tendencia = f"{Fore.RED}NÃO FOI POSSÍVEL ANALISAR A TENDÊNCIA POR CAUSA DO TRAVAMENTO"
+    else:
+        tendencia = calcular_tendencia(primeira_leitura_ajustada, ultima_leitura_ajustada)
     exibir_metricas_turno(menor_pressao, maior_pressao, media, amplitude, desvio_padrao, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, tendencia)
     return menor_pressao, maior_pressao, media, amplitude, desvio_padrao, soma, soma_quadrados, percentual_leituras, houve_travamento, zona_verde, zona_amarela, zona_vermelha, mudancas_zona, picos_vermelhos_isolados, pressao_critica_anterior, pressao_critica_atual, tendencia
 
