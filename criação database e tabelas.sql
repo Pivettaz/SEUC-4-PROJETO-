@@ -2,40 +2,40 @@ CREATE DATABASE odonpuc;
 USE odonpuc;
 
 CREATE TABLE funcionarios (
-id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
-nome_funcionario VARCHAR(50) NOT NULL,
-sobrenome_funcionario VARCHAR(50) NOT NULL,
-nome_social_funcionario VARCHAR(50),
-data_admissao_funcionario DATETIME DEFAULT CURRENT_TIMESTAMP,
-email VARCHAR(100) UNIQUE,
-celular_funcionario CHAR(11) UNIQUE NOT NULL,
-cargo VARCHAR(50) NOT NULL,
-ativo BOOLEAN DEFAULT TRUE,
-salario DECIMAL(10,2) NOT NULL
+    id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
+    nome_funcionario VARCHAR(50) NOT NULL,
+    sobrenome_funcionario VARCHAR(50) NOT NULL,
+    nome_social_funcionario VARCHAR(50),
+    data_admissao_funcionario DATETIME DEFAULT CURRENT_TIMESTAMP,
+    email VARCHAR(100) UNIQUE,
+    celular_funcionario CHAR(11) UNIQUE NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE,
+    salario DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE convenios (
-id_convenio INT PRIMARY KEY AUTO_INCREMENT,
-nome_convenio VARCHAR(100) DEFAULT NULL
+    id_convenio INT PRIMARY KEY AUTO_INCREMENT,
+    nome_convenio VARCHAR(100) DEFAULT NULL
 );
 
 CREATE TABLE clientes (
-id_cliente INT PRIMARY KEY AUTO_INCREMENT,
-nome_cliente VARCHAR(50) NOT NULL,
-sobrenome_cliente VARCHAR(50),
-nome_social_cliente VARCHAR(50),
-data_nascimento DATE NOT NULL,
-celular_cliente CHAR(11) UNIQUE NOT NULL,
-cpf CHAR(11) UNIQUE NOT NULL,
-id_convenio INT NOT NULL,
-data_criacao_usuario DATETIME DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (id_convenio) REFERENCES convenios(id_convenio)
+    id_cliente INT PRIMARY KEY AUTO_INCREMENT,
+    nome_cliente VARCHAR(50) NOT NULL,
+    sobrenome_cliente VARCHAR(50),
+    nome_social_cliente VARCHAR(50),
+    data_nascimento DATE NOT NULL,
+    celular_cliente CHAR(11) UNIQUE NOT NULL,
+    cpf CHAR(11) UNIQUE NOT NULL,
+    id_convenio INT NOT NULL,
+    data_criacao_usuario DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_convenio) REFERENCES convenios(id_convenio)
 );
 
 CREATE TABLE servicos (
-id_servico INT PRIMARY KEY AUTO_INCREMENT,
-nome_servico VARCHAR(40) NOT NULL,
-valor_base DECIMAL(10,2) NOT NULL
+    id_servico INT PRIMARY KEY AUTO_INCREMENT,
+    nome_servico VARCHAR(40) NOT NULL,
+    valor_base DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE especialidade (
