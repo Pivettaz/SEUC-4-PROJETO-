@@ -55,7 +55,7 @@ JOIN clientes c ON c.id_cliente = a.id_cliente
 JOIN servicos s ON s.id_servico = a.id_servico
 WHERE DATE(data_consulta) = CURRENT_DATE();
 
-#1-7) AGENDAMENTOS DA SEMANA (Sintaxe Corrigida)
+#1-7) AGENDAMENTOS DA SEMANA
 SELECT f.nome_funcionario AS dentista, c.nome_cliente, s.nome_servico, a.data_consulta, a.valor, a.pago
 FROM agendamentos a
 JOIN funcionarios f ON f.id_funcionario = a.id_funcionario
@@ -71,7 +71,7 @@ JOIN clientes c ON c.id_cliente = a.id_cliente
 JOIN servicos s ON s.id_servico = a.id_servico
 WHERE MONTH(data_consulta) = MONTH(NOW()) AND YEAR(data_consulta) = YEAR(NOW());
 
-#1-9) AGENDAMENTOS EM PERÍODO ESPECÍFICO (BETWEEN)
+#1-9) AGENDAMENTOS EM PERÍODO ESPECÍFICO
 SELECT f.nome_funcionario AS dentista, c.nome_cliente, s.nome_servico, a.data_consulta, a.valor, a.pago
 FROM agendamentos a
 JOIN funcionarios f ON f.id_funcionario = a.id_funcionario
@@ -136,7 +136,7 @@ JOIN clientes c ON c.id_cliente = a.id_cliente
 JOIN servicos s ON s.id_servico = a.id_servico
 WHERE DATE(data_consulta) = CURRENT_DATE() AND a.id_funcionario = 6 AND f.cargo = 'Dentista';
 
-#1-14) AGENDAMENTOS DA SEMANA DO DENTISTA (Sintaxe Corrigida)
+#1-14) AGENDAMENTOS DA SEMANA DO DENTISTA 
 -- Joyce (id_funcionario = 6)
 SELECT f.nome_funcionario AS dentista, c.nome_cliente, s.nome_servico, a.data_consulta, a.valor, a.pago
 FROM agendamentos a
@@ -332,7 +332,6 @@ FROM funcionarios
 GROUP BY cargo
 ORDER BY media_salarial DESC;
 
-
 #4) SERVIÇOS
 
 # MODIFICAÇÕES
@@ -386,7 +385,6 @@ SELECT s.nome_servico, s.valor_base
 FROM servicos s
 LEFT JOIN agendamentos a ON s.id_servico = a.id_servico
 WHERE a.id_agendamento IS NULL;
-
 
 #5) ADMINISTRATIVO, AUDITORIA E MAPEAMENTO LGPD (Novas Tabelas inclusas)
 
@@ -447,7 +445,6 @@ FROM clientes c
 JOIN agendamentos a ON c.id_cliente = a.id_cliente
 JOIN termos_privacidade t ON c.id_cliente = t.id_cliente
 WHERE t.aceitou_termo_privacidade = FALSE;
-
 
 # TABELAS APÓS EDIÇÃO
 SELECT * FROM agendamentos;
