@@ -5,10 +5,14 @@ CREATE TABLE funcionarios (
 id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
 nome_funcionario VARCHAR(50) NOT NULL,
 sobrenome_funcionario VARCHAR(50) NOT NULL,
+nome_social VARCHAR(50),
+data_admissao_funcionario DATETIME DEFAULT CURRENT_TIMESTAMP,
 email VARCHAR(100) UNIQUE,
 celular_funcionario CHAR(11) UNIQUE NOT NULL,
 cargo VARCHAR(50) NOT NULL,
-salario DECIMAL(10,2) NOT NULL);
+ativo BOOLEAN DEFAULT TRUE,
+salario DECIMAL(10,2) NOT NULL
+);
 
 CREATE TABLE convenios (
 id_convenio INT PRIMARY KEY AUTO_INCREMENT,
@@ -32,6 +36,14 @@ CREATE TABLE servicos (
 id_servico INT PRIMARY KEY AUTO_INCREMENT,
 nome_servico VARCHAR(40) NOT NULL,
 valor_base DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE especialidade (
+    id_especialidade INT PRIMARY KEY AUTO_INCREMENT,
+    id_funcionario INT NOT NULL,
+    id_servico INT NOT NULL,
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (id_servico) REFERENCES servicos(id_servico)
 );
 
 CREATE TABLE agendamentos (
