@@ -23,7 +23,7 @@ CREATE TABLE clientes (
 id_cliente INT PRIMARY KEY AUTO_INCREMENT,
 nome_cliente VARCHAR(50) NOT NULL,
 sobrenome_cliente VARCHAR(50),
-nome_social_funcionario VARCHAR(50),
+nome_social_cliente VARCHAR(50),
 data_nascimento DATE NOT NULL,
 celular_cliente CHAR(11) UNIQUE NOT NULL,
 cpf CHAR(11) UNIQUE NOT NULL,
