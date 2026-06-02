@@ -80,7 +80,6 @@ CREATE TABLE logs_auditoria (
     data_acao DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
---
 CREATE TABLE termos_privacidade (
     id_termo INT PRIMARY KEY AUTO_INCREMENT,
     id_cliente INT NOT NULL,
