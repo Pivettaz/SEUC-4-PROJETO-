@@ -184,7 +184,7 @@ WHERE id_cliente = 4;
 #2-3) ALTERAR NOME SOCIAL
 #UPDATE clientes SET nome_social_cliente = 'Nome Social' WHERE id_cliente = X;
 -- Ana (id_cliente = 1)
-UPDATE clientes SET nome_social_cliente = 'Exemplo Nome Social'
+UPDATE clientes SET nome_social_cliente = 'Aninha'
 WHERE id_cliente = 1;
 
 #2-4) REMOVER NOME SOCIAL
@@ -256,7 +256,8 @@ WHERE id_funcionario = 2;
 
 #3-3) ALTERAR NOME SOCIAL DO FUNCIONÁRIO
 #UPDATE funcionarios SET nome_social_funcionario = 'Nome Social' WHERE id_funcionario = X;
-UPDATE funcionarios SET nome_social_funcionario = 'Exemplo'
+-- Pedro (id_funcionario = 5)
+UPDATE funcionarios SET nome_social_funcionario = 'Pedrão'
 WHERE id_funcionario = 5;
 
 #3-4) DESATIVAR FUNCIONÁRIO
@@ -475,12 +476,12 @@ ORDER BY total_acoes DESC;
 SELECT SUM(valor) AS faturamento_realizado FROM agendamentos WHERE pago = TRUE;
 
 #8-2) FOLHA SALARIAL
-SELECT SUM(salario) AS folha_salarial FROM funcionarios;
+SELECT SUM(salario) AS folha_salarial FROM funcionarios WHERE ativo = TRUE;
 
 #8-3) LUCRO LÍQUIDO ESTIMADO
 SELECT
     (SELECT SUM(valor) FROM agendamentos WHERE pago = TRUE) -
-    (SELECT SUM(salario) FROM funcionarios) AS lucro_liquido_estimado;
+    (SELECT SUM(salario) FROM funcionarios WHERE ativo = TRUE) AS lucro_liquido_estimado;
 
 #8-4) TICKET MÉDIO DAS CONSULTAS PAGAS
 SELECT AVG(valor) AS ticket_medio FROM agendamentos WHERE valor > 0 AND pago = TRUE;
