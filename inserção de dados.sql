@@ -152,13 +152,13 @@ INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_n
 VALUES (3, TRUE, TRUE, FALSE);  -- Mariana autoriza avisos mas não compartilhamento
 
 INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_notificacoes_whatsapp, permite_compartilhamento_convenio)
-VALUES (4, TRUE, TRUE, FALSE);
+VALUES (4, TRUE, TRUE, FALSE); -- João não autoriza compartilhamento de convênio
 
 INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_notificacoes_whatsapp, permite_compartilhamento_convenio)
 VALUES (5, TRUE, TRUE, TRUE);   -- Fernanda autorizou compartilhamento (necessário para Amil)
 
 INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_notificacoes_whatsapp, permite_compartilhamento_convenio)
-VALUES (6, TRUE, FALSE, FALSE);
+VALUES (6, TRUE, FALSE, FALSE); -- Ricardo não autoriza notificações e compartilhamento de convênio
 
 
 #8) INSERÇÃO DE PRONTUÁRIOS
