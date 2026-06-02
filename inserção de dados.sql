@@ -20,7 +20,7 @@ VALUES ('Fabiana', 'Melo', 'Fabi', '2023-09-05 08:00:00', 'fabi.contato@gmail.co
 
 #DENTISTA
 INSERT INTO funcionarios (nome_funcionario, sobrenome_funcionario, nome_social_funcionario, data_admissao_funcionario, email, celular_funcionario, cargo, ativo, salario)
-VALUES ('Pedro', 'Gomes', NULL, '2021-02-15 08:00:00', 'pedro.gomes@gmail.com', '19993467443', 'Dentista', TRUE, 6500.00);
+VALUES ('Pedro', 'Gomes', NULL, '2021-02-15 08:00:00', 'pedro.gomes@gmail.com', '19993467443', 'Dentista', FALSE, 6500.00); -- id 5 (inativo - afastamento médico)
 
 INSERT INTO funcionarios (nome_funcionario, sobrenome_funcionario, nome_social_funcionario, data_admissao_funcionario, email, celular_funcionario, cargo, ativo, salario)
 VALUES ('Joyce', 'Professora Incrivel', 'Profa. Joyce', '2020-07-01 08:00:00', 'joyce.contato@gmail.com', '19909873709', 'Dentista', TRUE, 8000.00);
@@ -155,10 +155,10 @@ INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_n
 VALUES (4, TRUE, TRUE, FALSE); -- João não autoriza compartilhamento de convênio
 
 INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_notificacoes_whatsapp, permite_compartilhamento_convenio)
-VALUES (5, TRUE, TRUE, TRUE);   -- Fernanda autorizou compartilhamento (necessário para Amil)
+VALUES (5, TRUE, TRUE, FALSE);  -- Fernanda não autorizou compartilhamento com o convênio (pendente)
 
 INSERT INTO termos_privacidade (id_cliente, aceitou_termo_privacidade, permite_notificacoes_whatsapp, permite_compartilhamento_convenio)
-VALUES (6, TRUE, FALSE, FALSE); -- Ricardo não autoriza notificações e compartilhamento de convênio
+VALUES (6, FALSE, FALSE, FALSE); -- Ricardo não assinou o termo de privacidade
 
 
 #8) INSERÇÃO DE PRONTUÁRIOS
